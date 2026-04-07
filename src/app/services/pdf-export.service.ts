@@ -241,27 +241,39 @@ export class PdfExportService {
     page.appendChild(wm);
 
     // ── Corner decoration (themed Pokémon) ────────────────────────────────────
-    const cornerTR = document.createElement('img');
-    cornerTR.src = theme.cornerImg;
-    cornerTR.style.cssText = `
-      position:absolute;top:12px;right:12px;width:110px;height:110px;
+    const cornerTL = document.createElement('img');
+    cornerTL.src = theme.cornerImg;
+    cornerTL.style.cssText = `
+      position:absolute;top:12px;left:12px;width:110px;height:110px;
+      object-fit:contain;opacity:0.35;z-index:1;
+      filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    `;
+    cornerTL.crossOrigin = 'anonymous';
+
+    const cornerBR = document.createElement('img');
+    cornerBR.src = theme.cornerImg;
+    cornerBR.style.cssText = `
+      position:absolute;bottom:12px;right:12px;width:110px;height:110px;
       object-fit:contain;opacity:0.35;z-index:1;
       filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));
       transform:scaleX(-1);
     `;
-    cornerTR.crossOrigin = 'anonymous';
+    cornerBR.crossOrigin = 'anonymous';
 
-    const cornerBL = document.createElement('img');
-    cornerBL.src = theme.cornerImg;
-    cornerBL.style.cssText = `
-      position:absolute;bottom:12px;left:12px;width:110px;height:110px;
-      object-fit:contain;opacity:0.35;z-index:1;
-      filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    page.appendChild(cornerTL);
+    page.appendChild(cornerBR);
+
+    // ── Teo logo stamp (top-right) ────────────────────────────────────────────
+    const teoStamp = document.createElement('img');
+    teoStamp.src = 'assets/teo-logo.png';
+    teoStamp.style.cssText = `
+      position:absolute;top:18px;right:18px;height:90px;width:auto;
+      object-fit:contain;opacity:0.55;z-index:2;
+      filter:drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+      transform:rotate(12deg);
     `;
-    cornerBL.crossOrigin = 'anonymous';
-
-    page.appendChild(cornerTR);
-    page.appendChild(cornerBL);
+    teoStamp.crossOrigin = 'anonymous';
+    page.appendChild(teoStamp);
 
     // ── Inner content wrapper ─────────────────────────────────────────────────
     const inner = document.createElement('div');
@@ -280,24 +292,9 @@ export class PdfExportService {
       text-align:center;margin-bottom:18px;width:100%;
     `;
     headline.innerHTML = `
-      <div style="
-        display:inline-block;
-        background:${theme.accentColor};
-        color:${theme.textOnAccent};
-        font-size:13px;font-weight:800;
-        letter-spacing:6px;text-transform:uppercase;
-        padding:5px 22px;border-radius:100px;
-        box-shadow:0 4px 0 ${theme.accentDark};
-        margin-bottom:12px;
-      ">✦ TEO'S BIRTHDAY PARTY ✦</div>
-      <h1 style="
-        font-size:52px;font-weight:900;font-style:italic;
-        color:${theme.titleColor};
-        margin:0;
-        letter-spacing:-1px;
-        text-shadow:3px 3px 0 rgba(0,0,0,0.08);
-        line-height:1;
-      ">POKÉMON BINGO</h1>
+      <img src="assets/teos-party.png" alt="Teo's Party"
+        style="height:130px;object-fit:contain;display:block;margin:-10px auto 0;"
+        crossorigin="anonymous">
     `;
     inner.appendChild(headline);
 
@@ -312,7 +309,8 @@ export class PdfExportService {
         border:5px dashed ${theme.textOnAccent};
         box-shadow:0 10px 0 ${theme.accentDark};
         margin-bottom:22px;
-        text-align:center;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        box-sizing:border-box;
       `;
       nameBanner.innerHTML = `
         <div style="height:3px;background:rgba(255,255,255,0.6);border-radius:2px;width:340px;margin:6px auto;"></div>
@@ -321,17 +319,19 @@ export class PdfExportService {
     } else {
       nameBanner.style.cssText = `
         width:620px;
-        padding:20px 40px;
         background:${theme.accentColor};
         border-radius:20px;
         border:5px solid ${theme.textOnAccent};
         box-shadow:0 10px 0 ${theme.accentDark};
         margin-bottom:22px;
-        text-align:center;
+        display:flex;align-items:center;justify-content:center;
+        box-sizing:border-box;
+        padding:12px 40px 16px;
       `;
       nameBanner.innerHTML = `
         <span style="font-size:68px;font-weight:900;color:${theme.textOnAccent};text-transform:uppercase;letter-spacing:3px;
-          text-shadow:3px 3px 0 ${theme.accentDark};line-height:1;">${player.name}</span>
+          text-shadow:2px 2px 0 ${theme.accentDark};line-height:1.1;
+          display:block;width:100%;text-align:center;position:relative;top:-5px;">${player.name}</span>
       `;
     }
     inner.appendChild(nameBanner);

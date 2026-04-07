@@ -60,12 +60,20 @@
         [src]="lastDrawn()!.img"
         [alt]="lastDrawn()!.name"
       />
-      <h2 class="reveal-name">{{ lastDrawn()!.name }}</h2>
+      <div class="reveal-nameplate" [style.--pokemon-color]="lastDrawn()!.color">
+        <div class="nameplate-bar"></div>
+        <h2 class="reveal-name">{{ lastDrawn()!.name }}</h2>
+        <div class="nameplate-bar"></div>
+      </div>
 
-      <!-- Draw again hint -->
-      <button class="draw-again-btn" (click)="onDraw()" [disabled]="isDrawing() || !availablePokemon().length">
-        @if (!availablePokemon().length) { 🎉 All drawn! } @else { ⚡ Draw next }
-      </button>
+      <!-- Draw again / all-drawn image button -->
+      @if (!availablePokemon().length) {
+        <img class="action-btn-img" src="assets/all-drawn.png" alt="All drawn!" />
+      } @else {
+        <button class="draw-again-btn" (click)="onDraw()" [disabled]="isDrawing()">
+          <img src="assets/draw-next-button.png" alt="Draw Next" />
+        </button>
+      }
     </div>
 
   }

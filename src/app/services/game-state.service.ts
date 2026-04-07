@@ -50,7 +50,7 @@ export class GameStateService {
         const rnd = POKEMON_DATA[Math.floor(Math.random() * POKEMON_DATA.length)];
         this.shufflePreview.set(rnd);
         count++;
-        if (count > 25) {
+        if (count > 65) {
           clearInterval(interval);
           const available = this.availablePokemon();
           const picked = available[Math.floor(Math.random() * available.length)];

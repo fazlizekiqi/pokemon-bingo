@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+﻿@use 'tailwindcss';
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes pulse-yellow {
+  0%   { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.7); }
+  70%  { box-shadow: 0 0 0 15px rgba(250, 204, 21, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0); }
+}
+
+.pulse-highlight {
+  animation: pulse-yellow 1.5s infinite;
+  border-color: #facc15 !important;
+  border-width: 4px !important;
+}

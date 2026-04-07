@@ -1,0 +1,24 @@
+﻿<div
+  class="bg-white rounded-[2.5rem] p-6 shadow-xl border-4 relative overflow-hidden"
+  [class.border-yellow-400]="player().won"
+  [class.border-white]="!player().won"
+>
+  @if (player().won) {
+    <div class="absolute top-3 right-4 text-2xl animate-bounce">🏆</div>
+  }
+  <div class="flex flex-col items-center mb-6">
+    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">PLAYER BOARD</span>
+    <div class="bg-blue-600 text-white px-8 py-2 rounded-2xl shadow-[0_6px_0_0_#1e3a8a] border-2 border-white w-full text-center">
+      <h3 class="font-extrabold text-2xl italic uppercase">{{ player().name }}</h3>
+    </div>
+  </div>
+  <div class="grid grid-cols-3 gap-3">
+    @for (tile of player().tiles; track tile.id; let idx = $index) {
+      <app-pokemon-tile
+        [tile]="tile"
+        [isDrawn]="isDrawn(tile.id)"
+        (tileClick)="onTileClick(idx)"
+      />
+    }
+  </div>
+</div>

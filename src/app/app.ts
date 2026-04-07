@@ -1,12 +1,17 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { HeaderComponent } from './components/header/header';
+import { HostHubComponent } from './components/host-hub/host-hub';
+import { PlayerBoardsComponent } from './components/player-boards/player-boards';
+import { GameStateService } from './services/game-state.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [HeaderComponent, HostHubComponent, PlayerBoardsComponent],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('pokemon-bingo');
+  readonly gameState = inject(GameStateService);
+  protected readonly activeTab = this.gameState.activeTab;
 }

@@ -1,0 +1,15 @@
+﻿<div
+  (click)="onClick()"
+  class="pokemon-tile relative aspect-square bg-slate-50 border-2 border-slate-100 rounded-2xl flex flex-col items-center justify-center p-2"
+  [class.marked]="tile().marked"
+  [class.cursor-pointer]="isDrawn()"
+  [class.opacity-30]="!isDrawn()"
+  [class.grayscale]="!isDrawn()"
+  [class.pointer-events-none]="!isDrawn()"
+>
+  @if (tile().marked) {
+    <span class="absolute inset-0 flex items-center justify-center text-4xl z-10 pointer-events-none">⭐</span>
+  }
+  <img [src]="tile().img" [alt]="tile().name" class="w-12 h-12 object-contain" />
+  <span class="text-[9px] font-bold uppercase mt-1 text-slate-500 truncate w-full text-center">{{ tile().name }}</span>
+</div>

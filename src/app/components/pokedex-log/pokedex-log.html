@@ -1,0 +1,17 @@
+﻿<div class="bg-white rounded-[2rem] p-6 shadow-md border border-slate-100 flex flex-col h-[550px]">
+  <h3 class="font-bold text-slate-800 mb-4 uppercase text-xs tracking-widest">POKÉDEX LOG</h3>
+  @if (!drawnHistory().length) {
+    <div class="flex-1 flex items-center justify-center text-slate-300 text-sm italic">
+      No Pokémon drawn yet
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 gap-3 overflow-y-auto">
+      @for (pokemon of drawnHistory(); track pokemon.id) {
+        <div class="bg-slate-50 p-2 flex flex-col items-center border border-slate-100 rounded-xl">
+          <img [src]="pokemon.img" [alt]="pokemon.name" class="w-8 h-8 object-contain" />
+          <span class="text-[8px] font-bold uppercase truncate w-full text-center text-slate-600">{{ pokemon.name }}</span>
+        </div>
+      }
+    </div>
+  }
+</div>

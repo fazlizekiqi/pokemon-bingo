@@ -26,11 +26,16 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install npm 10.9.0
+        run: npm install -g npm@10.9.0
+
       - name: Install dependencies
-        run: npm install --include=dev
+        run: npm ci
 
       - name: Build Angular app
-        run: npm run build -- --base-href "/${{ github.event.repository.name }}/"
+        run: |
+          export PATH="$PWD/node_modules/.bin:$PATH"
+          ng build --base-href "/${{ github.event.repository.name }}/"
 
       - name: Upload build output
         uses: actions/upload-pages-artifact@v3

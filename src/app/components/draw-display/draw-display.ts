@@ -34,6 +34,6 @@ export class DrawDisplayComponent {
       this.gameState.commitDraw(picked);
       this.lastDrawn.set(picked);
       this.ballPhase.set('done');
-    }, 5100);
+    }, 4500);
   }
 }

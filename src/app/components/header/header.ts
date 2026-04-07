@@ -21,7 +21,7 @@ export class HeaderComponent {
   }
   onReset(): void {
     if (confirm('Reset the game? All progress will be lost.')) {
-      this.gameState.resetGame();
+      window.location.reload();
     }
   }
 }

@@ -22,7 +22,7 @@ export class PdfExportService {
       pageEl.innerHTML = `
         <div style="position:absolute;inset:0;opacity:0.1;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;pointer-events:none;">
           ${Array(12).fill(0).map(() =>
-            `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="poke-ball"
+            `<img src="assets/pokemon/poke-ball.png" alt="poke-ball"
               style="width:150px;margin:40px;transform:rotate(${Math.random() * 360}deg);" crossorigin="anonymous">`
           ).join('')}
         </div>

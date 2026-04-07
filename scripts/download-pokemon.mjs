@@ -53,6 +53,11 @@ const POKEMON = [
   { id: 25, name: 'Vulpix',     pokeId: 37  },
 ];
 
+const BALLS = [
+  { name: 'ultra-ball', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png', file: 'ultra-ball.png' },
+  { name: 'poke-ball',  url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png',  file: 'poke-ball.png'  },
+];
+
 async function download(url, dest) {
   return new Promise((resolve, reject) => {
     const options = new URL(url);
@@ -87,6 +92,17 @@ async function main() {
     process.stdout.write(`Downloading ${p.name} (${p.pokeId})... `);
     try {
       await download(url, dest);
+      console.log('✓');
+    } catch (e) {
+      console.log(`✗  ${e.message}`);
+    }
+  }
+
+  for (const b of BALLS) {
+    const dest = join(OUTPUT_DIR, b.file);
+    process.stdout.write(`Downloading ${b.name}... `);
+    try {
+      await download(b.url, dest);
       console.log('✓');
     } catch (e) {
       console.log(`✗  ${e.message}`);

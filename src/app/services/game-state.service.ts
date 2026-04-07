@@ -1,10 +1,8 @@
 ﻿import { Injectable, signal, computed } from '@angular/core';
 import { Player, PlayerTile, Pokemon } from '../models/pokemon.model';
 import { POKEMON_DATA, PARTY_NAMES, WIN_LINES } from '../data/pokemon.data';
-export type ActiveTab = 'host' | 'players';
 @Injectable({ providedIn: 'root' })
 export class GameStateService {
-  readonly activeTab = signal<ActiveTab>('host');
   readonly drawnHistory = signal<Pokemon[]>([]);
   readonly players = signal<Player[]>([]);
   readonly isDrawing = signal(false);
@@ -29,9 +27,6 @@ export class GameStateService {
     this.drawnHistory.set([]);
     this.isDrawing.set(false);
     this.shufflePreview.set(null);
-  }
-  switchTab(tab: ActiveTab): void {
-    this.activeTab.set(tab);
   }
   toggleTile(playerId: number, tileIndex: number): void {
     this.players.update(players =>
@@ -61,7 +56,6 @@ export class GameStateService {
           clearInterval(interval);
           const available = this.availablePokemon();
           const picked = available[Math.floor(Math.random() * available.length)];
-          this.drawnHistory.update(h => [picked, ...h]);
           this.shufflePreview.set(null);
           this.isDrawing.set(false);
           resolve(picked);
@@ -69,6 +63,10 @@ export class GameStateService {
       }, 100);
     });
   }
+  commitDraw(picked: Pokemon): void {
+    this.drawnHistory.update(h => [picked, ...h]);
+  }
+
   resetGame(): void {
     this.initGame();
   }

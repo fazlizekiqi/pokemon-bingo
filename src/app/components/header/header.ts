@@ -1,5 +1,5 @@
 ﻿import { Component, inject, signal } from '@angular/core';
-import { GameStateService, ActiveTab } from '../../services/game-state.service';
+import { GameStateService } from '../../services/game-state.service';
 import { PdfExportService } from '../../services/pdf-export.service';
 @Component({
   selector: 'app-header',
@@ -10,11 +10,7 @@ import { PdfExportService } from '../../services/pdf-export.service';
 export class HeaderComponent {
   private readonly gameState = inject(GameStateService);
   private readonly pdfExport = inject(PdfExportService);
-  activeTab = this.gameState.activeTab;
   isExporting = signal(false);
-  switchTab(tab: ActiveTab): void {
-    this.gameState.switchTab(tab);
-  }
   async onExportPdf(): Promise<void> {
     this.isExporting.set(true);
     try {

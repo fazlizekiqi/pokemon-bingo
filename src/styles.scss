@@ -4,12 +4,74 @@ body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   overflow-x: hidden;
   margin: 0;
+  background-color: #7f0000;
+  background-image:
+    radial-gradient(ellipse at 50%   0%,  #c0392b 0%,  transparent 60%),
+    radial-gradient(ellipse at 0%   50%,  #96281b 0%,  transparent 55%),
+    radial-gradient(ellipse at 100% 50%,  #7f0000 0%,  transparent 55%),
+    radial-gradient(ellipse at 50%  100%, #4a0000 0%,  transparent 60%),
+    radial-gradient(ellipse at 50%   50%, rgba(255,210,0,0.08) 0%, transparent 50%);
+  min-height: 100vh;
+  animation: bg-breathe 8s ease-in-out infinite;
+}
+
+@keyframes bg-breathe {
+  0%, 100% { filter: brightness(1);   }
+  50%       { filter: brightness(1.08); }
+}
+
+/* soft light orbs floating in the background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(ellipse 600px 400px at 20%  30%, rgba(255,100,80,0.12)  0%, transparent 70%),
+    radial-gradient(ellipse 500px 500px at 80%  20%, rgba(255,200,0,0.07)   0%, transparent 70%),
+    radial-gradient(ellipse 700px 400px at 60%  80%, rgba(180,0,0,0.2)      0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 10%  80%, rgba(255,120,60,0.09)  0%, transparent 70%);
+  animation: orbs-drift 12s ease-in-out infinite alternate;
+}
+
+@keyframes orbs-drift {
+  0%   { transform: translateY(0px)   scale(1);    }
+  50%  { transform: translateY(-18px) scale(1.03); }
+  100% { transform: translateY(6px)   scale(0.98); }
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.card {
+  background: rgba(255, 248, 248, 0.88);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border-radius: 3rem;
+  border: none;
+  box-shadow:
+    0 0  0  1px  rgba(255, 255, 255, 0.45),   /* very soft rim */
+    0 2px 0  rgba(255, 255, 255, 0.55),        /* top sheen */
+    0 8px 32px  rgba(120,  0,  0, 0.22),       /* mid red glow */
+    0 32px 80px rgba(60,   0,  0, 0.28),       /* deep diffuse */
+    inset 0 1px 0 rgba(255,255,255,0.8);       /* inner top highlight */
+  animation: card-float 6s ease-in-out infinite;
+}
+
+@keyframes card-float {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes tile-pop {
+  0%   { opacity: 0; transform: scale(0.6) translateX(-12px); }
+  70%  { transform: scale(1.08) translateX(2px); }
+  100% { opacity: 1; transform: scale(1.05) translateX(0); }
 }
 
 @keyframes pulse-yellow {

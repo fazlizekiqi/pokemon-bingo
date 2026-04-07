@@ -1,53 +1,46 @@
-﻿<header class="glass border-b-4 border-blue-500 p-4 sticky top-0 z-50 shadow-sm">
-  <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
-    <!-- Logo -->
-    <div class="flex items-center gap-3">
-      <div class="bg-red-500 w-10 h-10 rounded-full border-4 border-white shadow-md flex items-center justify-center text-white font-bold italic">
-        T
+﻿<header class="glass py-5 px-6 mb-6 mx-6 mt-4 rounded-[2rem]">
+  <div class="max-w-screen-2xl mx-auto flex items-center justify-between gap-4">
+
+    <!-- Logo / Title -->
+    <div class="flex items-center gap-4">
+      <div class="relative w-14 h-14 flex-shrink-0">
+        <!-- Pokéball icon -->
+        <div class="w-14 h-14 rounded-full border-4 border-white shadow-xl overflow-hidden">
+          <div class="w-full h-1/2 bg-white"></div>
+          <div class="w-full h-1/2 bg-white"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-full h-[4px] bg-white"></div>
+          </div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-5 h-5 rounded-full bg-white border-4 border-white shadow-md z-10"></div>
+          </div>
+        </div>
       </div>
-      <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight uppercase">
-        TEO'S <span class="text-blue-600">BINGO</span>
-      </h1>
+      <div>
+        <h1 class="text-4xl font-black text-white uppercase italic leading-none tracking-tight drop-shadow-md">
+          TEO'S <span class="text-yellow-300">POKÉMON</span> BINGO
+        </h1>
+        <p class="text-white/60 text-sm font-bold tracking-widest uppercase mt-0.5">Gotta Catch 'Em All!</p>
+      </div>
     </div>
-    <!-- Tab nav -->
-    <nav class="flex bg-slate-200/50 p-1 rounded-2xl">
-      <button
-        (click)="switchTab('host')"
-        class="tab-btn px-5 py-2 rounded-xl font-bold transition-all text-sm"
-        [class.bg-blue-600]="activeTab() === 'host'"
-        [class.text-white]="activeTab() === 'host'"
-        [class.shadow-md]="activeTab() === 'host'"
-        [class.text-slate-600]="activeTab() !== 'host'"
-      >
-        HOST HUB
-      </button>
-      <button
-        (click)="switchTab('players')"
-        class="tab-btn px-5 py-2 rounded-xl font-bold transition-all text-sm"
-        [class.bg-blue-600]="activeTab() === 'players'"
-        [class.text-white]="activeTab() === 'players'"
-        [class.shadow-md]="activeTab() === 'players'"
-        [class.text-slate-600]="activeTab() !== 'players'"
-      >
-        PLAYER BOARDS
-      </button>
-    </nav>
+
     <!-- Actions -->
-    <div class="flex gap-2">
+    <div class="flex gap-3 items-center">
       <button
         (click)="onExportPdf()"
         [disabled]="isExporting()"
-        class="px-5 py-2 rounded-xl font-bold bg-green-600 text-white shadow-lg hover:bg-green-700 disabled:opacity-60 transition-all text-sm flex items-center gap-2"
+        class="px-6 py-3 rounded-2xl font-black bg-yellow-400 text-slate-900 shadow-[0_6px_0_0_#a16207] active:shadow-none active:translate-y-1 hover:bg-yellow-300 disabled:opacity-60 transition-all text-sm flex items-center gap-2 uppercase tracking-wide"
       >
-        <span>{{ isExporting() ? '⏳' : '🖨️' }}</span>
-        {{ isExporting() ? 'EXPORTING...' : 'EXPORT A4 CARDS' }}
+        <span class="text-lg">{{ isExporting() ? '⏳' : '🖨️' }}</span>
+        {{ isExporting() ? 'Exporting...' : 'Print Cards' }}
       </button>
       <button
         (click)="onReset()"
-        class="px-4 py-2 rounded-xl font-bold bg-white text-red-500 border border-red-100 hover:bg-red-50 transition text-sm"
+        class="px-6 py-3 rounded-2xl font-black bg-white/20 text-white border border-white/30 hover:bg-white/30 transition-all text-sm uppercase tracking-wide backdrop-blur-sm"
       >
-        RESET
+        🔄 Reset
       </button>
     </div>
+
   </div>
 </header>

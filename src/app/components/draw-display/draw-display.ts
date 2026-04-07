@@ -28,8 +28,9 @@ export class DrawDisplayComponent {
     // Open the ball
     this.ballPhase.set('opening');
 
-    // After opening animation, reveal the pokemon
+    // After opening animation: reveal pokemon AND commit to history at the same time
     setTimeout(() => {
+      this.gameState.commitDraw(picked);
       this.lastDrawn.set(picked);
       this.ballPhase.set('done');
     }, 1100);

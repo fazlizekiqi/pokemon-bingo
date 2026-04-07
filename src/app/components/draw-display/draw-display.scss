@@ -1,4 +1,48 @@
-﻿// Pokéball container
+﻿// ── Card shell ────────────────────────────────────────────────────────────────
+.draw-card {
+  background: rgba(255, 246, 246, 0.86);
+  backdrop-filter: blur(36px);
+  -webkit-backdrop-filter: blur(36px);
+  border-radius: 3.5rem;
+  box-shadow:
+    inset 0  1px 0   rgba(255, 255, 255, 0.75),  // top inner sheen
+    inset 0 -1px 0   rgba(180,  60,  60, 0.08),   // bottom inner tint
+    0  0   0  1px    rgba(255, 200, 200, 0.25),    // soft outer rim
+    0  8px 32px      rgba(140,   0,   0, 0.18),    // mid glow
+    0 32px 80px      rgba( 80,   0,   0, 0.28);    // deep diffuse
+}
+
+// Rotating shimmer ring — very subtle
+.shimmer-ring {
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 20%,
+    transparent 40%,
+    rgba(255, 200, 200, 0.05) 60%,
+    transparent 80%
+  );
+  animation: shimmer-spin 10s linear infinite;
+}
+
+@keyframes shimmer-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg);   }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes aura-pulse {
+  0%, 100% { transform: scale(0.85); opacity: 0.45; }
+  50%       { transform: scale(1.05); opacity: 0.65; }
+}
+
+// ── Pokéball ───────────────────────────────────────────────────────────────────
+
 .pokeball-wrapper {
   position: relative;
   display: flex;

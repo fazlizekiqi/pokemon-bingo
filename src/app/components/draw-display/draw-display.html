@@ -1,60 +1,93 @@
-﻿<div class="bg-white rounded-[2.5rem] p-8 shadow-xl border border-slate-200 text-center relative overflow-hidden flex flex-col justify-between min-h-[550px]">
+﻿<div class="draw-card relative overflow-hidden flex flex-col items-center justify-between" style="animation: card-float 7s ease-in-out infinite; animation-delay: -1s; min-height: 580px; padding: 3rem 3.5rem;">
+
+  <!-- Spotlight cone from top -->
+  <div class="absolute inset-0 pointer-events-none" style="
+    background:
+      radial-gradient(ellipse 55% 70% at 50% -10%, rgba(255,255,255,0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 40% at 50% 100%, rgba(120,0,0,0.18) 0%, transparent 70%);
+  "></div>
+
+  <!-- Subtle animated shimmer ring -->
+  <div class="absolute pointer-events-none shimmer-ring"></div>
+
   <!-- Draw area -->
-  <div class="flex-1 flex flex-col items-center justify-center">
+  <div class="flex-1 flex flex-col items-center justify-center w-full z-10">
+
     @if (ballPhase() === 'shaking' || ballPhase() === 'opening') {
-      <!-- Pokéball animation -->
-      <div class="pokeball-wrapper" [class.opening]="ballPhase() === 'opening'">
-        <div class="pokeball" [class.shaking]="ballPhase() === 'shaking'" [class.opening]="ballPhase() === 'opening'">
-          <!-- Top half (red) -->
-          <div class="ball-top"></div>
-          <!-- Bottom half (white) -->
-          <div class="ball-bottom"></div>
-          <!-- Center band -->
-          <div class="ball-band"></div>
-          <!-- Center button -->
-          <div class="ball-button">
-            <div class="ball-button-inner"></div>
+      <!-- Ball stage — spotlight underneath -->
+      <div class="relative flex flex-col items-center">
+        <div class="pokeball-wrapper" [class.opening]="ballPhase() === 'opening'">
+          <div class="pokeball" [class.shaking]="ballPhase() === 'shaking'" [class.opening]="ballPhase() === 'opening'">
+            <div class="ball-top"></div>
+            <div class="ball-bottom"></div>
+            <div class="ball-band"></div>
+            <div class="ball-button">
+              <div class="ball-button-inner"></div>
+            </div>
           </div>
+          @if (ballPhase() === 'opening') {
+            <div class="ball-flash"></div>
+          }
         </div>
-        <!-- Flash effect on open -->
-        @if (ballPhase() === 'opening') {
-          <div class="ball-flash"></div>
-        }
+        <!-- Ground shadow -->
+        <div style="width:100px; height:18px; border-radius:50%; background: rgba(0,0,0,0.12); filter: blur(6px); margin-top: -8px;"></div>
       </div>
       @if (ballPhase() === 'shaking') {
-        <p class="font-black text-red-500 uppercase tracking-widest mt-6 animate-pulse text-sm">
+        <p class="font-black uppercase tracking-[0.3em] mt-8 animate-pulse text-lg" style="color: rgba(150,40,40,0.55)">
           A wild Pokémon appears...
         </p>
       }
+
     } @else if (ballPhase() === 'done' && lastDrawn()) {
-      <div class="text-center animate-in zoom-in duration-500">
-        <img [src]="lastDrawn()!.img" class="w-64 h-64 scale-110 drop-shadow-2xl mx-auto" [alt]="lastDrawn()!.name" />
-        <h3 class="text-6xl font-black text-slate-800 uppercase italic mt-4">{{ lastDrawn()!.name }}</h3>
+      <!-- Revealed pokemon -->
+      <div class="flex flex-col items-center animate-in zoom-in duration-500">
+        <div class="relative flex items-center justify-center">
+          <!-- Soft coloured aura -->
+          <div class="absolute rounded-full blur-3xl"
+               style="width: 300px; height: 300px; opacity: 0.5; animation: aura-pulse 2.5s ease-in-out infinite;"
+               [style.background]="lastDrawn()!.color"></div>
+          <img [src]="lastDrawn()!.img"
+               class="relative drop-shadow-2xl"
+               style="width: 280px; height: 280px;"
+               [alt]="lastDrawn()!.name" />
+        </div>
+        <h3 class="font-black uppercase italic tracking-tight"
+            style="font-size: 5rem; line-height: 1; margin-top: 0.5rem; color: #3b1010; text-shadow: 0 4px 24px rgba(200,0,0,0.12), 0 1px 0 rgba(255,255,255,0.8);">
+          {{ lastDrawn()!.name }}
+        </h3>
       </div>
+
     } @else {
-      <div class="space-y-4">
-        <img
-          src="assets/pokemon/ultra-ball.png"
-          class="w-20 mx-auto opacity-20"
-          alt="Ultra Ball"
-        />
-        <h2 class="text-2xl font-bold text-slate-400 italic">Ready to find a Pokémon?</h2>
+      <!-- Idle state -->
+      <div class="flex flex-col items-center gap-4">
+        <div style="width:90px; height:90px; border-radius:50%; background: rgba(180,40,40,0.07); display:flex; align-items:center; justify-content:center;">
+          <img src="assets/pokemon/ultra-ball.png" style="width:56px; opacity:0.18;" alt="Ultra Ball" />
+        </div>
+        <h2 class="font-black italic" style="font-size:2rem; color: rgba(120,30,30,0.4);">Ready to find a Pokémon?</h2>
+        <p class="font-bold uppercase tracking-widest text-sm" style="color: rgba(160,50,50,0.3)">Press the button below to draw!</p>
       </div>
     }
   </div>
 
   <!-- Draw button -->
-  <div class="mt-8">
+  <div class="z-10" style="margin-top: 2.5rem;">
     <button
       (click)="onDraw()"
       [disabled]="isDrawing() || !availablePokemon().length"
-      class="bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-3xl font-black py-6 px-16 rounded-[2rem] shadow-[0_12px_0_0_#b91c1c] active:shadow-none active:translate-y-2 transition-all w-full md:w-auto"
+      class="disabled:opacity-50 disabled:cursor-not-allowed text-white text-4xl font-black py-7 px-24 active:translate-y-3 transition-all uppercase tracking-wide"
+      style="
+        background: linear-gradient(160deg, #e53e3e 0%, #c53030 60%, #9b2c2c 100%);
+        border-radius: 2.5rem;
+        box-shadow: 0 10px 0 #7f1d1d, 0 14px 32px rgba(100,0,0,0.4);
+        border: none;
+      "
     >
       @if (!availablePokemon().length) {
-        ALL DRAWN! 🎉
+        🎉 ALL DRAWN!
       } @else {
-        DRAW POKÉMON!
+        ⚡ DRAW POKÉMON!
       }
     </button>
   </div>
+
 </div>

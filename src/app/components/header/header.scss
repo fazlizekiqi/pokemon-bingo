@@ -1,3 +1,102 @@
 ﻿:host {
   display: block;
 }
+
+.header-wrap {
+  padding: 1.5rem 0 1.25rem;
+}
+
+/* ── Inner wrapper — mirrors <main>'s max-w-screen-2xl mx-auto px-6 ── */
+.header-inner {
+  max-width: 1536px; /* Tailwind's screen-2xl */
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem; /* px-6 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* ── Teo logo (left-aligned, flush with content column) ─────────── */
+.teo-logo {
+  flex-shrink: 0;
+}
+
+.teo-logo-img {
+  height: 17.5rem;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+}
+
+/* ── Floating icon buttons ───────────────────────────────────────── */
+.action-pills {
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.6rem;
+  align-self: flex-start;
+}
+
+.action-btn {
+  width:  3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.3);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.28);
+    transform: scale(1.1);
+  }
+  &:active:not(:disabled) {
+    transform: scale(0.93);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* ── Title block ─────────────────────────────────────────────────── */
+.title-block {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-title {
+  margin: 0;
+  font-size: clamp(1rem, 2.8vw, 1.8rem);
+  font-weight: 900;
+  font-style: italic;
+  color: #fde047;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  /* sticker effect: thick dark outline + white inner glow */
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.6);
+  paint-order: stroke fill;
+  text-shadow:
+    -2px -2px 0 #1a1a2e,
+     2px -2px 0 #1a1a2e,
+    -2px  2px 0 #1a1a2e,
+     2px  2px 0 #1a1a2e,
+     0    0  12px rgba(253, 224, 71, 0.5);
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 0.2em 0.7em;
+  border-radius: 0.5em;
+  border: 2px solid rgba(253, 224, 71, 0.35);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.1);
+}

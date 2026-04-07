@@ -1,44 +1,28 @@
-﻿<header class="glass py-5 px-6 mb-6 mx-6 mt-4 rounded-[2rem]">
-  <div class="max-w-screen-2xl mx-auto flex items-center justify-between gap-4">
+﻿<header class="header-wrap">
+  <div class="header-inner">
 
-    <!-- Logo / Title -->
-    <div class="flex items-center gap-4">
-      <div class="relative w-14 h-14 flex-shrink-0">
-        <!-- Pokéball icon -->
-        <div class="w-14 h-14 rounded-full border-4 border-white shadow-xl overflow-hidden">
-          <div class="w-full h-1/2 bg-white"></div>
-          <div class="w-full h-1/2 bg-white"></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-full h-[4px] bg-white"></div>
-          </div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-5 h-5 rounded-full bg-white border-4 border-white shadow-md z-10"></div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h1 class="text-4xl font-black text-white uppercase italic leading-none tracking-tight drop-shadow-md">
-          TEO'S <span class="text-yellow-300">POKÉMON</span> BINGO
-        </h1>
-        <p class="text-white/60 text-sm font-bold tracking-widest uppercase mt-0.5">Gotta Catch 'Em All!</p>
-      </div>
+    <!-- ── Left: Teo logo ── -->
+    <div class="teo-logo">
+      <img src="assets/teo-logo.png" alt="Teo Logo" class="teo-logo-img" />
     </div>
 
-    <!-- Actions -->
-    <div class="flex gap-3 items-center">
+
+    <!-- ── Right: action buttons ── -->
+    <div class="action-pills">
       <button
+        class="action-btn"
         (click)="onExportPdf()"
         [disabled]="isExporting()"
-        class="px-6 py-3 rounded-2xl font-black bg-yellow-400 text-slate-900 shadow-[0_6px_0_0_#a16207] active:shadow-none active:translate-y-1 hover:bg-yellow-300 disabled:opacity-60 transition-all text-sm flex items-center gap-2 uppercase tracking-wide"
+        [title]="isExporting() ? 'Exporting…' : 'Print bingo cards'"
       >
-        <span class="text-lg">{{ isExporting() ? '⏳' : '🖨️' }}</span>
-        {{ isExporting() ? 'Exporting...' : 'Print Cards' }}
+        {{ isExporting() ? '⏳' : '🖨️' }}
       </button>
       <button
+        class="action-btn"
         (click)="onReset()"
-        class="px-6 py-3 rounded-2xl font-black bg-white/20 text-white border border-white/30 hover:bg-white/30 transition-all text-sm uppercase tracking-wide backdrop-blur-sm"
+        title="Reset game"
       >
-        🔄 Reset
+        🔄
       </button>
     </div>
 

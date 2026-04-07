@@ -9,6 +9,7 @@ export type BallPhase = 'idle' | 'shaking' | 'opening' | 'done';
   standalone: true,
   templateUrl: './draw-display.html',
   styleUrl: './draw-display.scss',
+  styles: [`:host { display: flex; flex: 1; }`],
 })
 export class DrawDisplayComponent {
   private readonly gameState = inject(GameStateService);

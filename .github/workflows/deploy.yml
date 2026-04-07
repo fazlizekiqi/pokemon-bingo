@@ -27,10 +27,10 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --include=dev
 
       - name: Build Angular app
-        run: ./node_modules/.bin/ng build --base-href "/${{ github.event.repository.name }}/"
+        run: npm run build -- --base-href "/${{ github.event.repository.name }}/"
 
       - name: Upload build output
         uses: actions/upload-pages-artifact@v3

@@ -1,5 +1,1 @@
-@import "tailwindcss";
-
-@theme {
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
-}
+/* Tailwind is imported in styles.scss - do not duplicate here */

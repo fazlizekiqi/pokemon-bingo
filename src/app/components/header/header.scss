@@ -1,4 +1,4 @@
-﻿:host {
+﻿﻿:host {
   display: block;
   overflow: visible;
 }
@@ -8,11 +8,9 @@
   overflow: visible;
 }
 
-/* ── Inner wrapper — mirrors <main>'s max-w-screen-2xl mx-auto px-6 ── */
+/* ── Inner wrapper — full width to match <main> ── */
 .header-inner {
-  max-width: 1536px; /* Tailwind's screen-2xl */
   width: 100%;
-  margin: 0 auto;
   padding: 0 1.5rem; /* px-6 */
   display: flex;
   align-items: center;
@@ -27,7 +25,7 @@
 }
 
 .teo-logo-img {
-  height: clamp(9rem, 24vh, 15rem);   /* visually large — overflows downward */
+  height: clamp(9rem, 24vh, 20rem);   /* visually large — overflows downward */
   width: auto;
   display: block;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
@@ -81,7 +79,7 @@
 }
 
 .party-title-img {
-  height: clamp(5.25rem, 13.5vh, 9rem);   /* bigger title, no layout impact */
+  height: clamp(5.25rem, 13.5vh, 12rem);   /* bigger title, no layout impact */
   max-width: 100%;
   object-fit: contain;
   display: block;
@@ -97,11 +95,11 @@
   }
 
   .teo-logo-img {
-    height: clamp(6.75rem, 18vh, 10.5rem);
+    height: clamp(6.75rem, 18vh, 14rem);
   }
 
   .party-title-img {
-    height: clamp(3.75rem, 9vh, 6rem);
+    height: clamp(3.75rem, 9vh, 8rem);
     margin-top: 0;
   }
 }
@@ -120,13 +118,13 @@
   }
 
   .teo-logo-img {
-    height: clamp(5.25rem, 15vh, 7.5rem);
+    height: clamp(5.25rem, 15vh, 10rem);
   }
 
   // ...existing code...
 
   .party-title-img {
-    height: clamp(3.3rem, 9vh, 4.8rem);
+    height: clamp(3.3rem, 9vh, 6.5rem);
     margin-top: 0;
   }
 }

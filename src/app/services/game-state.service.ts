@@ -1,6 +1,6 @@
 ﻿import { Injectable, signal, computed } from '@angular/core';
 import { Player, PlayerTile, Pokemon } from '../models/pokemon.model';
-import { POKEMON_DATA, PARTY_NAMES, WIN_LINES } from '../data/pokemon.data';
+import { POKEMON_DATA, PARTY_NAMES, WIN_LINES, TEO_TILES } from '../data/pokemon.data';
 @Injectable({ providedIn: 'root' })
 export class GameStateService {
   readonly drawnHistory = signal<Pokemon[]>([]);
@@ -15,13 +15,11 @@ export class GameStateService {
   }
   initGame(): void {
     const newPlayers: Player[] = PARTY_NAMES.map((name, i) => {
-      const shuffled = [...POKEMON_DATA].sort(() => 0.5 - Math.random());
-      return {
-        id: i,
-        name,
-        won: false,
-        tiles: shuffled.slice(0, 9).map(p => ({ ...p, marked: false })),
-      };
+      const isTeo = name === 'Teo';
+      const tiles: PlayerTile[] = isTeo
+        ? TEO_TILES.map(p => ({ ...p, marked: false }))
+        : [...POKEMON_DATA].sort(() => 0.5 - Math.random()).slice(0, 9).map(p => ({ ...p, marked: false }));
+      return { id: i, name, won: false, tiles };
     });
     this.players.set(newPlayers);
     this.drawnHistory.set([]);

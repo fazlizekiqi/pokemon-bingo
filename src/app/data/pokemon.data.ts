@@ -3,6 +3,7 @@ export const POKEMON_DATA: Pokemon[] = [
   { id: 1,  name: 'Pikachu',    img: 'assets/pokemon/25.png',  color: '#FFF9C4' },
   { id: 2,  name: 'Bulbasaur',  img: 'assets/pokemon/1.png',   color: '#E0F2F1' },
   { id: 3,  name: 'Charmander', img: 'assets/pokemon/4.png',   color: '#FFEBEE' },
+  { id: 26, name: 'Charizard',  img: 'assets/pokemon/6.png',   color: '#FFE0B2' },
   { id: 4,  name: 'Squirtle',   img: 'assets/pokemon/7.png',   color: '#E1F5FE' },
   { id: 5,  name: 'Eevee',      img: 'assets/pokemon/133.png', color: '#EFEBE9' },
   { id: 6,  name: 'Jigglypuff', img: 'assets/pokemon/39.png',  color: '#FCE4EC' },
@@ -34,3 +35,17 @@ export const WIN_LINES: number[][] = [
   [0,3,6],[1,4,7],[2,5,8],
   [0,4,8],[2,4,6]
 ];
+
+/** Teo's fixed birthday card tiles — always in this exact order */
+export const TEO_TILES: Pokemon[] = [
+  { id: 1,  name: 'Pikachu',   img: 'assets/pokemon/25.png',  color: '#FFF9C4' },
+  { id: 11, name: 'Togepi',    img: 'assets/pokemon/175.png', color: '#FFFDE7' },
+  { id: 26, name: 'Charizard', img: 'assets/pokemon/6.png',   color: '#FFE0B2' },
+  { id: 7,  name: 'Snorlax',   img: 'assets/pokemon/143.png', color: '#F5F5F5' },
+  { id: 12, name: 'Psyduck',   img: 'assets/pokemon/54.png',  color: '#FFF9C4' },
+  { id: 8,  name: 'Mewtwo',    img: 'assets/pokemon/150.png', color: '#F3E5F5' },
+  { id: 2,  name: 'Bulbasaur', img: 'assets/pokemon/1.png',   color: '#E0F2F1' },
+  { id: 9,  name: 'Gengar',    img: 'assets/pokemon/94.png',  color: '#EDE7F6' },
+  { id: 4,  name: 'Squirtle',  img: 'assets/pokemon/7.png',   color: '#E1F5FE' },
+];
+

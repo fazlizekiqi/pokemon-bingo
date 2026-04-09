@@ -7,7 +7,7 @@ import { POKEMON_DATA } from '../../data/pokemon.data';
   standalone: true,
   templateUrl: './pokedex-log.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [`:host { display: block; position: relative; z-index: 10001; }`],
+  styles: [`:host { display: block; position: relative; z-index: 10001; flex-shrink: 0; }`],
 })
 export class PokedexLogComponent {
   private readonly gameState = inject(GameStateService);

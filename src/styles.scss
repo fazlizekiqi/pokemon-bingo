@@ -19,6 +19,17 @@ body {
   min-height: 100vh;
 }
 
+/* Hide scrollbars everywhere — works across Firefox, IE, and Samsung Tizen (WebKit) */
+* {
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE / Edge */
+}
+*::-webkit-scrollbar {
+  display: none;               /* Chrome, Safari, Samsung Tizen WebKit */
+  width: 0;
+  height: 0;
+}
+
 /* bg-breathe & orbs-drift removed — they triggered full-screen repaint every frame */
 
 .glass {

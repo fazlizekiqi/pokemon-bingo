@@ -1,6 +1,8 @@
-﻿<div class="flex flex-col gap-6 flex-1 min-h-0">
-  <!-- Main draw area — center stage for TV -->
+﻿<div class="flex flex-col flex-1 min-h-0">
+  <!-- draw-display is position:fixed so it doesn't participate in flex flow -->
   <app-draw-display />
+  <!-- Spacer pushes the pokedex to the bottom -->
+  <div class="flex-1"></div>
   <!-- Drawn history strip at the bottom -->
   <app-pokedex-log />
 </div>

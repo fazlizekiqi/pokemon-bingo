@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:pages": "ng build --configuration production --base-href /pokemon-bingo/ --deploy-url /pokemon-bingo/",
-    "app:deploy": "npm run build:pages; Copy-Item dist/pokemon-bingo/browser/index.html dist/pokemon-bingo/browser/404.html; npx angular-cli-ghpages --dir=dist/pokemon-bingo/browser",
+    "app:deploy": "npx angular-cli-ghpages --dir=dist/pokemon-bingo/browser",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

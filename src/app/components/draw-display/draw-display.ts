@@ -12,7 +12,7 @@ const OPEN_ANIMATION_MS = 2400;
   standalone: true,
   templateUrl: './draw-display.html',
   styleUrl: './draw-display.scss',
-  styles: [`:host { display: flex; flex: 1 1 0; min-height: 0; overflow: hidden; }`],
+  styles: [`:host { display: block; position: fixed; inset: 0; pointer-events: none; z-index: 100; }`],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawDisplayComponent {

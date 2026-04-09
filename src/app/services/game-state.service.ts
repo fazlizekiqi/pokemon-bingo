@@ -46,11 +46,12 @@ export class GameStateService {
     return new Promise((resolve) => {
       this.isDrawing.set(true);
       let count = 0;
+      const total = 20; // Reduced from 65 — fewer signal writes = fewer CD cycles
       const interval = setInterval(() => {
         const rnd = POKEMON_DATA[Math.floor(Math.random() * POKEMON_DATA.length)];
         this.shufflePreview.set(rnd);
         count++;
-        if (count > 65) {
+        if (count >= total) {
           clearInterval(interval);
           const available = this.availablePokemon();
           const picked = available[Math.floor(Math.random() * available.length)];
@@ -58,7 +59,7 @@ export class GameStateService {
           this.isDrawing.set(false);
           resolve(picked);
         }
-      }, 100);
+      }, 60); // 20 × 60ms ≈ 1.2s of shuffling — still visually satisfying
     });
   }
   commitDraw(picked: Pokemon): void {

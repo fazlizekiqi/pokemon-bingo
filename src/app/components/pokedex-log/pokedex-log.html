@@ -1,4 +1,4 @@
-﻿<div class="card p-6" style="animation-duration: 9s; animation-delay: -3s;">
+﻿<div class="card p-6">
 
   <div class="flex items-center gap-3 mb-5">
     <!-- Soft pill label -->
@@ -13,8 +13,8 @@
       <!-- Soft progress bar -->
       <div class="w-32 h-2 rounded-full overflow-hidden" style="background: rgba(200,80,80,0.12);">
         <div
-          class="h-full rounded-full transition-all duration-700"
-          style="background: linear-gradient(to right, #fc8181, #e53e3e);"
+          class="h-full rounded-full"
+          style="background: linear-gradient(to right, #fc8181, #e53e3e); transition: width 0.5s ease;"
           [style.width.%]="(drawnHistory().length / total) * 100">
         </div>
       </div>
@@ -29,15 +29,16 @@
     <div class="flex gap-3 overflow-x-auto pb-2" style="-ms-overflow-style:none; scrollbar-width:none;">
       @for (pokemon of drawnHistory(); track pokemon.id; let i = $index) {
         <div
-          class="flex-shrink-0 flex flex-col items-center gap-1 rounded-3xl p-3 w-24 transition-all duration-300"
-          [class.scale-105]="i === 0"
+          class="flex-shrink-0 flex flex-col items-center gap-1 rounded-3xl p-3 w-24"
           [style.background]="i === 0 ? 'rgba(255,220,80,0.18)' : 'rgba(200,80,80,0.06)'"
           [style.box-shadow]="i === 0 ? '0 4px 20px rgba(200,120,0,0.18), inset 0 1px 0 rgba(255,255,255,0.7)' : '0 2px 8px rgba(150,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5)'"
+          [style.transform]="i === 0 ? 'scale(1.05)' : 'none'"
           [style.animation]="i === 0 ? 'tile-pop 0.4s cubic-bezier(0.22,1,0.36,1)' : 'none'"
         >
           <div class="w-10 h-10 rounded-full flex items-center justify-center"
                [style.background]="pokemon.color">
-            <img [src]="pokemon.img" [alt]="pokemon.name" class="w-9 h-9 object-contain" />
+            <img [src]="pokemon.img" [alt]="pokemon.name" class="w-9 h-9 object-contain"
+                 style="image-rendering:crisp-edges;image-rendering:pixelated;" />
           </div>
           <span class="text-[10px] font-black uppercase text-center leading-tight w-full truncate"
                 [style.color]="i === 0 ? '#92400e' : 'rgba(120,40,40,0.7)'">

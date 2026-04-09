@@ -1,8 +1,11 @@
-﻿import { Component, inject, signal } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { GameStateService } from '../../services/game-state.service';
 import { Pokemon } from '../../models/pokemon.model';
 
 export type BallPhase = 'idle' | 'shaking' | 'opening' | 'done';
+
+/** Opening animation duration in ms — keep in sync with pokeball-open keyframe */
+const OPEN_ANIMATION_MS = 2400;
 
 @Component({
   selector: 'app-draw-display',
@@ -10,6 +13,7 @@ export type BallPhase = 'idle' | 'shaking' | 'opening' | 'done';
   templateUrl: './draw-display.html',
   styleUrl: './draw-display.scss',
   styles: [`:host { display: flex; flex: 1 1 0; min-height: 0; overflow: hidden; }`],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawDisplayComponent {
   private readonly gameState = inject(GameStateService);
@@ -34,6 +38,6 @@ export class DrawDisplayComponent {
       this.gameState.commitDraw(picked);
       this.lastDrawn.set(picked);
       this.ballPhase.set('done');
-    }, 4500);
+    }, OPEN_ANIMATION_MS + 100);
   }
 }

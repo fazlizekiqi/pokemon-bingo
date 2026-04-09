@@ -1,4 +1,4 @@
-﻿<div class="draw-stage">
+﻿﻿<div class="draw-stage">
 
   @if (ballPhase() === 'idle' || ballPhase() === 'shaking' || ballPhase() === 'opening') {
 
@@ -23,9 +23,14 @@
                [class.idle-float]="ballPhase() === 'idle'"
                [class.shaking]="ballPhase() === 'shaking'"
                [class.opening]="ballPhase() === 'opening'">
-            <div class="ball-top"></div>
-            <div class="ball-bottom"></div>
-            <div class="ball-band"></div>
+            <!-- pokeball-clip is a NON-animated div that does the circular clipping.
+                 Keeping overflow:hidden off the animated parent avoids the Samsung TV
+                 compositor rectangle glitch. -->
+            <div class="pokeball-clip">
+              <div class="ball-top"></div>
+              <div class="ball-bottom"></div>
+              <div class="ball-band"></div>
+            </div>
             <div class="ball-button">
               <div class="ball-button-inner"></div>
             </div>
@@ -53,25 +58,31 @@
     <!-- ── Revealed Pokémon floating on the background ── -->
     <div class="reveal-stage">
       <div class="reveal-aura" [style.background]="lastDrawn()!.color"></div>
-      <img
-        class="reveal-img"
-        [src]="lastDrawn()!.img"
-        [alt]="lastDrawn()!.name"
-      />
-      <div class="reveal-nameplate" [style.--pokemon-color]="lastDrawn()!.color">
-        <div class="nameplate-bar"></div>
-        <h2 class="reveal-name">{{ lastDrawn()!.name }}</h2>
-        <div class="nameplate-bar"></div>
+
+      <!-- Center column: image + name -->
+      <div class="reveal-center">
+        <img
+          class="reveal-img"
+          [src]="lastDrawn()!.img"
+          [alt]="lastDrawn()!.name"
+        />
+        <div class="reveal-nameplate" [style.--pokemon-color]="lastDrawn()!.color">
+          <div class="nameplate-bar"></div>
+          <h2 class="reveal-name">{{ lastDrawn()!.name }}</h2>
+          <div class="nameplate-bar"></div>
+        </div>
       </div>
 
-      <!-- Draw again / all-drawn image button -->
-      @if (!availablePokemon().length) {
-        <img class="action-btn-img" src="assets/all-drawn.png" alt="All drawn!" />
-      } @else {
-        <button class="draw-again-btn" (click)="onDraw()" [disabled]="isDrawing()">
-          <img src="assets/draw-next-button.png" alt="Draw Next" />
-        </button>
-      }
+      <!-- Right-side action: draw next or all-drawn -->
+      <div class="reveal-action">
+        @if (!availablePokemon().length) {
+          <img class="action-btn-img" src="assets/all-drawn.png" alt="All drawn!" />
+        } @else {
+          <button class="draw-again-btn" (click)="onDraw()" [disabled]="isDrawing()">
+            <img src="assets/draw-next-button.png" alt="Draw Next" />
+          </button>
+        }
+      </div>
     </div>
 
   }

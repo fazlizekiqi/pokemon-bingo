@@ -1,4 +1,4 @@
-﻿import { Component, inject } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { GameStateService } from '../../services/game-state.service';
 import { POKEMON_DATA } from '../../data/pokemon.data';
 
@@ -6,6 +6,8 @@ import { POKEMON_DATA } from '../../data/pokemon.data';
   selector: 'app-pokedex-log',
   standalone: true,
   templateUrl: './pokedex-log.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`:host { display: block; position: relative; z-index: 10001; }`],
 })
 export class PokedexLogComponent {
   private readonly gameState = inject(GameStateService);

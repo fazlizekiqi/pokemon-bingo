@@ -1,13 +1,13 @@
 ﻿// ── Stage — no card, fills all available viewport height ─────────────────────
 .draw-stage {
   display: flex;
-  flex: 1 1 0;          // grow into available space but start from zero basis
-  min-height: 0;        // allow flex to shrink below content size
+  flex: 1 1 0;
+  min-height: 0;
   align-items: center;
   justify-content: center;
   position: relative;
   width: 100%;
-  overflow: hidden;      // prevent content from pushing siblings
+  overflow: hidden;
 }
 
 // ── Ball stage layout ─────────────────────────────────────────────────────────
@@ -20,6 +20,7 @@
 }
 
 // Pulsing outer glow ring behind the ball when idle
+// Simplified: no scale, just opacity — cheaper on TV compositors
 .idle-ring {
   position: absolute;
   width:  clamp(180px, 52vmin, 280px);
@@ -34,8 +35,8 @@
 }
 
 @keyframes idle-ring-pulse {
-  0%, 100% { transform: translate(-50%, -60%) scale(1);    opacity: 0.7; }
-  50%       { transform: translate(-50%, -60%) scale(1.25); opacity: 1;   }
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1;   }
 }
 
 // The button wrapping the pokeball — no chrome at all
@@ -60,15 +61,15 @@
   }
 }
 
-// Gentle idle float on the ball when waiting for a tap
+// Gentle idle float — only opacity/transform, promotes to own layer
 .pokeball.idle-float {
   animation: ball-idle-float 3s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes ball-idle-float {
-  0%, 100% { transform: translateY(0px)   rotate(0deg);  }
-  30%       { transform: translateY(-10px) rotate(4deg);  }
-  60%       { transform: translateY(-6px)  rotate(-3deg); }
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-8px);  }
 }
 
 // Ellipse shadow under ball
@@ -79,12 +80,7 @@
   background: rgba(0, 0, 0, 0.18);
   filter: blur(8px);
   margin-top: -4px;
-  animation: shadow-pulse 3s ease-in-out infinite;
-}
-
-@keyframes shadow-pulse {
-  0%, 100% { transform: scaleX(1);    opacity: 0.18; }
-  30%       { transform: scaleX(0.75); opacity: 0.10; }
+  // Removed shadow-pulse animation — not worth the repaint cost
 }
 
 // Tap hint text
@@ -128,67 +124,75 @@
   position: fixed;
   inset: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0;
-  padding: 0 1rem;
   z-index: 9999;
-  // Background sweeps in from transparent to the darkened blur overlay
-  background: rgba(0, 0, 0, 0.0);
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-  animation:
-    reveal-bg   0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both,
-    reveal-drop 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
-}
-
-@keyframes reveal-bg {
-  0%   { background: rgba(0,0,0,0);    backdrop-filter: blur(0px);  -webkit-backdrop-filter: blur(0px); }
-  40%  { background: rgba(0,0,0,0.08); backdrop-filter: blur(1px);  -webkit-backdrop-filter: blur(1px); }
-  100% { background: rgba(0,0,0,0.22); backdrop-filter: blur(3px);  -webkit-backdrop-filter: blur(3px); }
-}
-
-@keyframes reveal-drop {
-  0%   { opacity: 0; transform: scale(0.82) translateY(28px); }
-  60%  { opacity: 1; transform: scale(1.03) translateY(-4px); }
-  100% { opacity: 1; transform: scale(1)    translateY(0);    }
-}
-
-// Coloured aura behind the pokemon
-.reveal-aura {
-  position: absolute;
-  width:  clamp(180px, 55vmin, 540px);
-  height: clamp(180px, 55vmin, 540px);
-  border-radius: 50%;
-  filter: blur(clamp(30px, 8vmin, 90px));
-  opacity: 0.55;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -55%);
-  animation: aura-pulse 2.5s ease-in-out infinite;
+  background: radial-gradient(ellipse 80% 80% at 50% 45%, transparent 40%, rgba(20, 0, 0, 0.35) 100%);
+  animation: reveal-drop 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
   pointer-events: none;
 }
 
-@keyframes aura-pulse {
-  0%, 100% { transform: translate(-50%, -55%) scale(0.9);  opacity: 0.45; }
-  50%       { transform: translate(-50%, -55%) scale(1.1);  opacity: 0.65; }
+@keyframes reveal-drop {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+// Center column — always perfectly centered on screen, unaffected by the button
+.reveal-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+// Button pinned to the right edge, vertically centered — never shifts the pokemon
+.reveal-action {
+  position: absolute;
+  right: clamp(1.5rem, 5vw, 5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  animation: reveal-btn-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+
+// Coloured aura — stays absolutely centered behind the pokemon
+.reveal-aura {
+  position: absolute;
+  width:  clamp(180px, 44vmin, 420px);
+  height: clamp(180px, 44vmin, 420px);
+  border-radius: 50%;
+  filter: blur(clamp(24px, 6vmin, 60px));
+  opacity: 0.35;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .reveal-img {
   position: relative;
-  width:  clamp(140px, 42vmin, 450px);
-  height: clamp(140px, 42vmin, 450px);
+  width:  clamp(180px, 46vmin, 460px);
+  height: clamp(180px, 46vmin, 460px);
   flex-shrink: 1;
   min-height: 0;
   object-fit: contain;
-  filter: drop-shadow(0 clamp(6px, 2vmin, 18px) clamp(20px, 6vmin, 60px) rgba(0,0,0,0.35));
-  animation: reveal-img-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+  // Crisp pixel rendering — prevents bilinear blur when the sprite is scaled up.
+   image-rendering: crisp-edges;  // Firefox / older browsers
+  image-rendering: pixelated;    // Chrome, Samsung TV Tizen 6+
+  // Keep the shadow for depth but don't blur the image itself
+  filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.6));
+  animation: reveal-img-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
 @keyframes reveal-img-in {
-  0%   { opacity: 0; transform: scale(0.72) translateY(20px); filter: drop-shadow(0 0 0 rgba(0,0,0,0)) brightness(2); }
-  60%  { opacity: 1; transform: scale(1.05) translateY(-4px); }
+  0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
+  60%  { opacity: 1; transform: scale(1.04) translateY(-4px); }
   100% { opacity: 1; transform: scale(1)    translateY(0); }
 }
 
@@ -199,8 +203,18 @@
   gap: 0.75rem;
   margin-top: 0.6rem;
   padding: 0.45rem 1.6rem;
-  -webkit-backdrop-filter: blur(8px);
-  animation: reveal-name-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
+  animation: reveal-name-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+// ...existing code...
+
+// ...existing code...
+
+@keyframes reveal-name-in {
+  0%   { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0);    }
 }
 
 // Decorative accent bars that pick up the Pokémon's color
@@ -211,7 +225,6 @@
   border-radius: 9999px;
   background: var(--pokemon-color, #fff);
   opacity: 0.85;
-  filter: brightness(1.3) saturate(1.2);
 }
 
 .reveal-name {
@@ -226,75 +239,67 @@
   color: #fff;
   text-align: center;
   word-break: break-word;
-  max-width: 80vw;
+  max-width: 60vw;
   text-shadow:
     0 2px 0   rgba(0, 0, 0, 0.6),
     0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes reveal-name-in {
-  0%   { opacity: 0; transform: translateY(16px) scale(0.88); }
-  60%  { opacity: 1; transform: translateY(-3px) scale(1.03); }
-  100% { opacity: 1; transform: translateY(0)    scale(1);    }
-}
-
 @keyframes reveal-btn-in {
-  0%   { opacity: 0; transform: translateX(-50%) translateY(24px) scale(0.9); }
-  100% { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1);   }
+  0%   { opacity: 0; transform: translateY(-50%) translateX(30px); }
+  100% { opacity: 1; transform: translateY(-50%) translateX(0);    }
 }
 
-// ── Image action buttons (Draw Next / All Drawn) ─────────────────────────────
+// ── Draw-next button — right-side FAB ────────────────────────────────────────
 .draw-again-btn {
-  background: none;
-  border: 3px dashed  #3466AF;
-  border-radius: 9999px;
-  padding: 18px 18px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  width:  clamp(90px, 14vmin, 140px);
+  height: clamp(90px, 14vmin, 140px);
+  padding: 0;
   cursor: pointer;
-  position: fixed;
-  bottom: clamp(20px, 5vmin, 60px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10000;
-  animation: reveal-btn-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-  box-shadow: 0 0 12px rgba(52, 102, 175, 0.35);
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 0 4px rgba(255,255,255,0.08),
+    0 8px 32px rgba(0,0,0,0.4);
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 
   img {
     display: block;
-    height: clamp(56px, 13vmin, 100px);
-    width: auto;
-    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5));
+    width:  70%;
+    height: 70%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
   }
 
   &:hover:not(:disabled) {
-    transform: translateX(-50%) scale(1.07) translateY(-3px);
-    box-shadow: 0 0 20px rgba(52, 102, 175, 0.6);
-    img { filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.6)) brightness(1.08); }
+    background: rgba(255, 255, 255, 0.22);
+    transform: scale(1.1);
+    box-shadow: 0 0 0 6px rgba(255,255,255,0.14), 0 12px 40px rgba(0,0,0,0.5);
   }
   &:active:not(:disabled) {
-    transform: translateX(-50%) scale(0.96);
+    transform: scale(0.94);
   }
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
   }
 }
 
 .action-btn-img {
   display: block;
-  position: fixed;
-  bottom: clamp(20px, 5vmin, 60px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10000;
-  height: clamp(56px, 13vmin, 120px);
-  width: auto;
-  border: 2.5px solid #3466AF;
+  width:  clamp(80px, 12vmin, 120px);
+  height: auto;
+  border: 2.5px solid rgba(255,255,255,0.5);
   border-radius: 9999px;
-  padding: 6px 18px;
-  box-shadow: 0 0 12px rgba(52, 102, 175, 0.35);
+  padding: 6px 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5));
-  animation: reveal-btn-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
+  pointer-events: auto;
 }
 
 // ── Pokéball ───────────────────────────────────────────────────────────────────
@@ -312,21 +317,38 @@
   width:  clamp(130px, 36vmin, 300px);
   height: clamp(130px, 36vmin, 300px);
   border-radius: 50%;
-  overflow: hidden;
+  // NO overflow:hidden and NO clip-path on the animated element.
+  // Samsung TV compositor drops border-radius when either property is present
+  // on a GPU-composited (will-change: transform) element → rectangle glitch.
+  // Clipping is handled by the static child .pokeball-clip instead.
+  overflow: visible;
   box-shadow:
     0 clamp(6px, 2vmin, 18px) clamp(20px, 6vmin, 60px) rgba(0, 0, 0, 0.45),
     0  4px 12px rgba(0, 0, 0, 0.25),
     inset 0  4px 10px rgba(255,255,255,0.12),
     inset 0 -6px 14px rgba(0,0,0,0.25);
   transform-origin: center bottom;
+  will-change: transform;
+  transform: translateZ(0);
 
   &.shaking {
     animation: pokeball-shake 1.4s ease-in-out infinite;
+    will-change: transform;
   }
   &.opening {
-    // Total: ~4.4s — drop-in bump → 3 rocks with decreasing amplitude → suspense pause → burst open
-    animation: pokeball-open 4.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    animation: pokeball-open 2.4s ease-in-out forwards;
+    will-change: transform, opacity;
+    // still no clip-path / overflow:hidden — clipping stays in .pokeball-clip
   }
+}
+
+// Static circular clip — never animated, never on its own GPU layer.
+// overflow:hidden + border-radius on a non-animated element is safe everywhere.
+.pokeball-clip {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 .ball-top {
@@ -349,8 +371,9 @@
     transform: rotate(-18deg);
   }
 
-  .opening & {
-    animation: open-top-half 4.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  .pokeball.opening .pokeball-clip & {
+    animation: open-top-half 2.4s ease-in-out forwards;
+    will-change: transform, opacity;
   }
 }
 
@@ -373,8 +396,9 @@
     transform: rotate(-10deg);
   }
 
-  .opening & {
-    animation: open-bottom-half 4.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  .pokeball.opening .pokeball-clip & {
+    animation: open-bottom-half 2.4s ease-in-out forwards;
+    will-change: transform, opacity;
   }
 }
 
@@ -382,7 +406,6 @@
   position: absolute;
   top: 50%; left: 0;
   width: 100%; height: 10px;
-  // Brushed gunmetal: bright highlight on top, dark groove in the middle, subtle sheen at bottom
   background: linear-gradient(
     to bottom,
     #9ca3af 0%,
@@ -396,7 +419,6 @@
   transform: translateY(-50%);
   z-index: 2;
 
-  // Thin bright specular line at very top of band
   &::before {
     content: '';
     position: absolute;
@@ -406,7 +428,6 @@
     border-radius: 1px 1px 0 0;
   }
 
-  // Thin bright line at very bottom of band
   &::after {
     content: '';
     position: absolute;
@@ -423,7 +444,6 @@
   width:  clamp(28px, 7vmin, 60px);
   height: clamp(28px, 7vmin, 60px);
   border-radius: 50%;
-  // Chrome ring: light at top-left, dark groove, lighter at bottom
   background: radial-gradient(circle at 42% 32%,
     #d1d5db 0%,
     #9ca3af 30%,
@@ -484,110 +504,131 @@
   inset: -20px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 70%);
-  animation: flash-burst 4.4s ease-out forwards;
+  animation: flash-burst 2.4s ease-out forwards;
   pointer-events: none;
   z-index: 10;
 }
 
 // ── Keyframes ─────────────────────────────────────────────────────────────────
 
-// Idle shaking while the draw is being processed (used before the opening phase)
 @keyframes pokeball-shake {
-  0%    { transform: rotate(0deg)    translateY(0);    }
-  6%    { transform: rotate(-6deg)   translateY(-3px); }
-  14%   { transform: rotate(-10deg)  translateY(-5px); }
-  22%   { transform: rotate(8deg)    translateY(-5px); }
-  30%   { transform: rotate(10deg)   translateY(-6px); }
-  38%   { transform: rotate(0deg)    translateY(0);    }
-  46%   { transform: rotate(-6deg)   translateY(-3px); }
-  54%   { transform: rotate(6deg)    translateY(-3px); }
-  62%   { transform: rotate(0deg)    translateY(0);    }
-  70%   { transform: rotate(-3deg)   translateY(-2px); }
-  78%   { transform: rotate(3deg)    translateY(-2px); }
-  86%   { transform: rotate(0deg)    translateY(0);    }
-  93%   { transform: rotate(-2deg)   translateY(-1px); }
-  100%  { transform: rotate(0deg)    translateY(0);    }
+  0%    { transform: translateZ(0) rotate(0deg)    translateY(0);    }
+  14%   { transform: translateZ(0) rotate(-10deg)  translateY(-5px); }
+  30%   { transform: translateZ(0) rotate(10deg)   translateY(-5px); }
+  46%   { transform: translateZ(0) rotate(-6deg)   translateY(-3px); }
+  62%   { transform: translateZ(0) rotate(6deg)    translateY(-3px); }
+  78%   { transform: translateZ(0) rotate(-2deg)   translateY(-1px); }
+  100%  { transform: translateZ(0) rotate(0deg)    translateY(0);    }
 }
 
-// ─── Realistic opening: 4.4 s total ─────────────────────────────────────────
-//
-//  Phase 1  0.00 – 0.20 s  Drop-in: ball falls slightly then settles (gravity)
-//  Phase 2  0.20 – 1.10 s  Rock 1: strongest tilt ~22° left then right
-//  Phase 3  1.10 – 1.90 s  Rock 2: medium tilt ~14° (energy losing)
-//  Phase 4  1.90 – 2.55 s  Rock 3: weak tilt ~7° (almost captured)
-//  Phase 5  2.55 – 3.30 s  Suspense still — tiny tremble, heart-in-mouth pause
-//  Phase 6  3.30 – 3.70 s  Button flash / swell — starts to glow & expand
-//  Phase 7  3.70 – 4.40 s  Burst open & fade out
-//
-// All percentages are (time / 4.4) * 100
-
+// ── TV-safe pokeball-open: only scale + opacity, no rotate mixing.
+// Mixing rotate + scale + translateY in the same keyframe triggers
+// Samsung TV compositor to drop border-radius → rectangle glitch.
+// 2.4s total:
+//   0–50%  gentle rock (scale only, tiny Y nudge)
+//   50–75% stillness / suspense
+//   75–100% swell → burst → fade
 @keyframes pokeball-open {
-  // Phase 1 — soft drop-in settle (no hard bounce)
-  0%   { transform: scale(1)    translateY(-6px);  opacity: 1; }
-  6%   { transform: scale(1.02) translateY(1px);   opacity: 1; }
-  11%  { transform: scale(0.99) translateY(0);     opacity: 1; }
-
-  // Phase 2 — rock 1 (smooth, ~14° — eases in and out slowly)
-  14%  { transform: scale(1)    rotate(0deg)    translateY(0);    opacity: 1; }
-  20%  { transform: scale(1.01) rotate(-8deg)   translateY(-2px); opacity: 1; }
-  26%  { transform: scale(1.01) rotate(-14deg)  translateY(-3px); opacity: 1; } // peak
-  32%  { transform: scale(1.01) rotate(10deg)   translateY(-2px); opacity: 1; }
-  37%  { transform: scale(1)    rotate(0deg)    translateY(0);    opacity: 1; }
-
-  // Phase 3 — rock 2 (smooth, ~9°)
-  41%  { transform: scale(1)    rotate(-5deg)   translateY(-2px); opacity: 1; }
-  46%  { transform: scale(1)    rotate(-9deg)   translateY(-2px); opacity: 1; } // peak
-  51%  { transform: scale(1)    rotate(6deg)    translateY(-1px); opacity: 1; }
-  55%  { transform: scale(1)    rotate(0deg)    translateY(0);    opacity: 1; }
-
-  // Phase 4 — rock 3 (subtle, ~5°)
-  58%  { transform: scale(1)    rotate(-3deg)   translateY(-1px); opacity: 1; }
-  61%  { transform: scale(1)    rotate(-5deg)   translateY(-1px); opacity: 1; } // peak
-  64%  { transform: scale(1)    rotate(3deg)    translateY(-1px); opacity: 1; }
-  67%  { transform: scale(1)    rotate(0deg)    translateY(0);    opacity: 1; }
-
-  // Phase 5 — suspense still (barely a breath)
-  70%  { transform: scale(1)    rotate(0deg)    translateY(0);    opacity: 1; }
-  73%  { transform: scale(1)    rotate(-1deg)   translateY(0);    opacity: 1; }
-  76%  { transform: scale(1)    rotate(0deg)    translateY(0);    opacity: 1; }
-
-  // Phase 6 — gentle swell / button glow builds
-  80%  { transform: scale(1.06) rotate(0deg)    translateY(-2px); opacity: 1; }
-  84%  { transform: scale(1.04) rotate(0deg)    translateY(-1px); opacity: 1; }
-
-  // Phase 7 — burst open & fade
-  90%  { transform: scale(1.12) rotate(0deg)    translateY(-4px); opacity: 0.55; }
-  96%  { transform: scale(1.18) rotate(0deg)    translateY(-6px); opacity: 0.15; }
-  100% { transform: scale(1.22) rotate(0deg)    translateY(-8px); opacity: 0;    }
+  0%   { transform: scale(1)    translateY(0);    opacity: 1; }
+  8%   { transform: scale(1.02) translateY(-3px); opacity: 1; }
+  16%  { transform: scale(0.98) translateY(1px);  opacity: 1; }
+  24%  { transform: scale(1.02) translateY(-2px); opacity: 1; }
+  32%  { transform: scale(0.99) translateY(0);    opacity: 1; }
+  40%  { transform: scale(1.01) translateY(-1px); opacity: 1; }
+  50%  { transform: scale(1)    translateY(0);    opacity: 1; }
+  // Suspense pause
+  72%  { transform: scale(1)    translateY(0);    opacity: 1; }
+  // Swell
+  82%  { transform: scale(1.06) translateY(-3px); opacity: 1; }
+  // Burst + fade
+  90%  { transform: scale(1.12) translateY(-5px); opacity: 0.5; }
+  100% { transform: scale(1.20) translateY(-8px); opacity: 0;   }
 }
 
-// Top half — stays closed through all rocks, then rockets up on burst
 @keyframes open-top-half {
-  // Closed through phases 1-6
   0%   { transform: translateY(0);      opacity: 1; }
-  80%  { transform: translateY(0);      opacity: 1; }
-  // Swell up slightly with the ball
-  84%  { transform: translateY(-6px);   opacity: 1; }
-  // Rockets up
-  92%  { transform: translateY(-80px)  rotate(-8deg);  opacity: 0.75; }
-  100% { transform: translateY(-200px) rotate(-18deg); opacity: 0;    }
+  72%  { transform: translateY(0);      opacity: 1; }
+  80%  { transform: translateY(-6px);   opacity: 1; }
+  90%  { transform: translateY(-80px);  opacity: 0.7; }
+  100% { transform: translateY(-200px); opacity: 0;   }
 }
 
-// Bottom half — mirrors the top, drops down on burst
 @keyframes open-bottom-half {
   0%   { transform: translateY(0);     opacity: 1; }
-  80%  { transform: translateY(0);     opacity: 1; }
-  84%  { transform: translateY(4px);   opacity: 1; }
-  92%  { transform: translateY(60px);  opacity: 0.75; }
-  100% { transform: translateY(160px); opacity: 0;    }
+  72%  { transform: translateY(0);     opacity: 1; }
+  80%  { transform: translateY(5px);   opacity: 1; }
+  90%  { transform: translateY(60px);  opacity: 0.7; }
+  100% { transform: translateY(160px); opacity: 0;   }
 }
 
-// Flash: charges up during swell, then explodes during burst
 @keyframes flash-burst {
   0%   { opacity: 0;    transform: scale(0.2);  }
-  70%  { opacity: 0;    transform: scale(0.2);  } // silent during rocks
-  80%  { opacity: 0.25; transform: scale(0.6);  } // starts charging
-  86%  { opacity: 0.8;  transform: scale(0.9);  } // bright
-  92%  { opacity: 1;    transform: scale(1.4);  } // peak burst
-  100% { opacity: 0;    transform: scale(2.6);  } // dissipates
+  70%  { opacity: 0;    transform: scale(0.2);  }
+  80%  { opacity: 0.7;  transform: scale(0.9);  }
+  90%  { opacity: 1;    transform: scale(1.4);  }
+  100% { opacity: 0;    transform: scale(2.4);  }
 }
+
+// ── TV / large display overrides (1280px+) ────────────────────────────────────
+// Samsung TV browsers report a scaled virtual viewport where vmin/vw/vh
+// units resolve to much smaller values, making clamp() stay at its minimum.
+// Fixed px values here ensure correct sizing on the TV.
+@media (min-width: 1280px) {
+  .pokeball-wrapper {
+    width:  280px;
+    height: 280px;
+  }
+
+  .pokeball {
+    width:  260px;
+    height: 260px;
+  }
+
+  .idle-ring {
+    width:  320px;
+    height: 320px;
+  }
+
+  .ground-shadow {
+    width:  200px;
+    height: 22px;
+  }
+
+  .ball-button {
+    width:  52px;
+    height: 52px;
+  }
+
+  .ball-button-inner {
+    width:  34px;
+    height: 34px;
+  }
+
+  .reveal-img {
+    width:  360px;
+    height: 360px;
+  }
+
+  .reveal-aura {
+    width:  300px;
+    height: 300px;
+  }
+
+  .reveal-name {
+    font-size: 3.5rem;
+  }
+
+  .draw-again-btn {
+    width:  160px;
+    height: 160px;
+  }
+
+  .action-btn-img {
+    width: 140px;
+  }
+
+  .tap-hint {
+    font-size: 1.4rem;
+  }
+}
+

@@ -11,6 +11,8 @@ export class HeaderComponent {
   private readonly gameState = inject(GameStateService);
   private readonly pdfExport = inject(PdfExportService);
   isExporting = signal(false);
+  isFullscreen = signal(!!document.fullscreenElement);
+
   async onExportPdf(): Promise<void> {
     this.isExporting.set(true);
     try {
@@ -19,9 +21,18 @@ export class HeaderComponent {
       this.isExporting.set(false);
     }
   }
+
   onReset(): void {
     if (confirm('Reset the game? All progress will be lost.')) {
       window.location.reload();
+    }
+  }
+
+  onToggleFullscreen(): void {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => this.isFullscreen.set(true)).catch(() => {});
+    } else {
+      document.exitFullscreen().then(() => this.isFullscreen.set(false)).catch(() => {});
     }
   }
 }

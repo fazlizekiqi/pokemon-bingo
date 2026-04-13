@@ -1,6 +1,8 @@
-﻿import { Component, inject, signal } from '@angular/core';
+﻿import { Component, inject, OnInit, signal } from '@angular/core';
 import { GameStateService } from '../../services/game-state.service';
 import { PdfExportService } from '../../services/pdf-export.service';
+import { AudioService } from '../../services/audio.service';
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -10,6 +12,8 @@ import { PdfExportService } from '../../services/pdf-export.service';
 export class HeaderComponent {
   private readonly gameState = inject(GameStateService);
   private readonly pdfExport = inject(PdfExportService);
+  readonly audio = inject(AudioService);
+
   isExporting = signal(false);
   isFullscreen = signal(!!document.fullscreenElement);
 
@@ -30,9 +34,20 @@ export class HeaderComponent {
 
   onToggleFullscreen(): void {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().then(() => this.isFullscreen.set(true)).catch(() => {});
+      document.documentElement
+        .requestFullscreen()
+        .then(() => this.isFullscreen.set(true))
+        .catch(() => {});
     } else {
-      document.exitFullscreen().then(() => this.isFullscreen.set(false)).catch(() => {});
+      document
+        .exitFullscreen()
+        .then(() => this.isFullscreen.set(false))
+        .catch(() => {});
     }
+  }
+
+  onToggleMusic(): void {
+    this.audio.startBackgroundMusic();
+    this.audio.toggleMute();
   }
 }

@@ -19,6 +19,13 @@
     <div class="action-pills">
       <button
         class="action-btn"
+        (click)="onToggleMusic()"
+        [title]="audio.muted() ? 'Play music' : 'Mute music'"
+      >
+        {{ audio.muted() ? '🔇' : '🎵' }}
+      </button>
+      <button
+        class="action-btn"
         (click)="onToggleFullscreen()"
         [title]="isFullscreen() ? 'Exit fullscreen' : 'Fullscreen (TV mode)'"
       >
